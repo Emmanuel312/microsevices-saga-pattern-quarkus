@@ -1,0 +1,40 @@
+quarkus:
+  datasource:
+    db-kind: postgresql
+    username: test
+    password: test
+    reactive:
+      url: vertx-reactive:postgresql://localhost:5432/booking
+  hibernate-orm:
+    database:
+      generation: drop-and-create
+
+kafka:
+  bootstrap:
+    servers: localhost:9092
+
+mp:
+  messaging:
+    outgoing:
+      booking-created:
+        value:
+          serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer
+        topic: booking-created
+        connector: smallrye-kafka
+    incoming:
+      booking_available:
+        #        auto:
+        #          offset:
+        #            reset: earliest
+        value:
+          deserializer: br.com.emmanuel.kafka.serializer.BookingAvailableSerializer
+        topic: booking_available
+        connector: smallrye-kafka
+      booking_not_available:
+        #        auto:
+        #          offset:
+        #            reset: earliest
+        value:
+          deserializer: br.com.emmanuel.kafka.serializer.BookingNotAvailableSerializer
+        topic: booking_not_available
+        connector: smallrye-kafka

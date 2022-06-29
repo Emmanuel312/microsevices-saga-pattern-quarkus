@@ -1,0 +1,30 @@
+quarkus:
+  http:
+    port: 8090
+
+kafka:
+  bootstrap:
+    servers: localhost:9092
+
+mp:
+  messaging:
+    incoming:
+      booking-created:
+#        auto:
+#          offset:
+#            reset: earliest
+        value:
+          deserializer: br.com.emmanuel.kafka.dto.BookingCreatedDtoSerializer
+        topic: booking-created
+        connector: smallrye-kafka
+    outgoing:
+      booking_available:
+        value:
+          serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer
+        topic: booking_available
+        connector: smallrye-kafka
+      booking_not_available:
+        value:
+          serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer
+        topic: booking_not_available
+        connector: smallrye-kafka
